@@ -15,6 +15,7 @@ interface TelemetryTableProps {
   keys: string;
   startTs: number;
   endTs: number;
+  limit?: number;
 }
 
 const formattedData = (data: any, keys: string) => {
@@ -62,6 +63,7 @@ const TelemetryTable = ({
   keys,
   startTs,
   endTs,
+  limit = 200,
 }: TelemetryTableProps) => {
   const [dataFormatTable, setDataFormatTable] = useState() as any;
   const [loading, setLoading] = useState(false);
@@ -112,7 +114,10 @@ const TelemetryTable = ({
         endTs,
       });
       const formatData = formattedData(resp.data, keys);
-      setDataFormatTable(formatData);
+      const sliced = Array.isArray(formatData)
+        ? formatData.slice(0, Math.max(0, limit))
+        : formatData;
+      setDataFormatTable(sliced);
       setLoading(false);
     };
     getData();

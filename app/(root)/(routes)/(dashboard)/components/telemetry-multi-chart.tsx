@@ -39,12 +39,13 @@ const TelemetryMultiChart: React.FC<Props> = ({ token, entityId, startTs, endTs,
           }
         );
         if (!mounted) return;
+        const payload = (resp as any)?.data ?? resp;
         const toSeries = (arr?: any[]) => (arr || []).map((it: any) => ({ ts: it.ts, value: parseFloat(it.value) }));
         setData({
-          air_temp: toSeries(resp?.air_temp),
-          air_hum: toSeries(resp?.air_hum),
-          lux: toSeries(resp?.lux),
-          soil_moist: toSeries(resp?.soil_moist),
+          air_temp: toSeries(payload?.air_temp),
+          air_hum: toSeries(payload?.air_hum),
+          lux: toSeries(payload?.lux),
+          soil_moist: toSeries(payload?.soil_moist),
         });
       } finally {
         if (mounted) setLoading(false);
